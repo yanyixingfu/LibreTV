@@ -1,24 +1,24 @@
-# wrangler.toml - LibreTV Workers 最终配置文件
-# 1. 基础配置（固定格式，无需频繁修改）
-name = "libretv-worker"               # Workers 服务名称（自定义，如“libretv-my”）
-main = "worker.js"                    # 入口文件（与下方 worker.js 对应，不可改）
-compatibility_date = "2024-09-03"     # 适配 Wrangler 4.x 的兼容日期（固定值即可）
-compatibility_flags = ["streams_enable_constructors"]  # 启用视频流处理依赖
+# 1. 基础配置（无语法错误，直接保留）
+name = "libretv-worker"
+main = "worker.js"
+compatibility_date = "2024-09-03"
+compatibility_flags = ["streams_enable_constructors"]
 
-# 2. 环境变量（必须配置，否则代理鉴权失败）
+# 2. 环境变量（替换 PASSWORD 为你的实际密码）
 [vars]
-PASSWORD = "yanyixingfu"            # 替换为你的鉴权密码（如 123456，建议复杂些）
-CACHE_TTL = "86400"                   # 视频资源缓存时间（默认 24 小时，无需改）
-MAX_RECURSION = "5"                   # 代理递归层数（默认值，无需改）
-DEBUG = "false"                       # 调试模式（关闭即可，避免日志冗余）
+PASSWORD = "yanyixingfu"  # 示例：替换为你的鉴权密码，如 123456 或 abc123
+CACHE_TTL = "86400"
+MAX_RECURSION = "5"
+DEBUG = "false"
 
-# 3. 静态资源配置（指向 LibreTV 根目录）
+# 3. 静态资源目录（指向项目根目录，不可改）
 [site]
-bucket = "./"                         # 静态文件目录（含 index.html、css、js 等，不可改）
+bucket = "./"
 
-# 4. 路由配置（关键：必须是数组格式，用“-”开头）
-# 注意：zone_name 需是你在 Cloudflare 已添加并激活的主域名（如 yanyixingfu.top）
+# 4. 路由配置（关键：数组格式，严格注意以下3点）
+# ① [routes] 下单独一行写 "- pattern = ..."，"-" 前无任何字符（顶格）
+# ② "pattern" 和 "zone_name" 用英文引号，等号前后各1个空格
+# ③ 注释用英文 #，避免中文符号（如全角空格、中文#）
 [routes]
-- pattern = "libretv1.yanyixingfu.top/*"  # 你的子域名（替换为实际子域名，如“tv.你的域名.com/*”）
-  zone_name = "yanyixingfu.top"          # 你的 Cloudflare 主域名（无 www，无子域名）
-
+- pattern = "libretv1.yanyixingfu.top/*"  # 你的子域名，如 libretv1.yanyixingfu.top
+  zone_name = "yanyixingfu.top"          # 你的主域名，如 yanyixingfu.top（无 www）
