@@ -193,28 +193,28 @@ async function handleStaticAsset(request) {
       ASSET_MANIFEST: __STATIC_CONTENT_MANIFEST
     });
 
-    // 处理 HTML 时注入环境变量（同原 Netlify/Vercel 逻辑，替换 {{PASSWORD}} 占位符）
-    const contentType = response.headers.get('Content-Type') || '';
-    if (contentType.includes('text/html')) {
-      const html = await response.text();
-      const password = ENV.PASSWORD || '';
-      let passwordHash = '';
-      if (password) {
-        const encoder = new TextEncoder();
-        const hashBuffer = await crypto.subtle.digest('SHA-256', encoder.encode(password));
-        const hashArray = Array.from(new Uint8Array(hashBuffer));
-        passwordHash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-      }
-      // 替换 HTML 中的密码占位符
-      const modifiedHtml = html.replace(
-        'window.__ENV__.PASSWORD = "{{PASSWORD}}";',
-        `window.__ENV__.PASSWORD = "${passwordHash}"; // SHA-256 hash`
-      );
-      return new Response(modifiedHtml, {
-        status: response.status,
-        headers: response.headers
-      });
-    }
+    // 处理 HTML 时注入环境变量（关键修复：ENV → env）
+const contentType = response.headers.get('Content-Type') || '';
+if (contentType.includes('text/html')) {
+  const html = await response.text();
+  const password = env.PASSWORD || ''; // 修复：将 ENV 改为 env（Wrangler 4.x 规范）
+  let passwordHash = '';
+  if (password) {
+    const encoder = new TextEncoder();
+    const hashBuffer = await crypto.subtle.digest('SHA-256', encoder.encode(password));
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    passwordHash = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+  // 替换 HTML 中的密码占位符
+  const modifiedHtml = html.replace(
+    'window.__ENV__.PASSWORD = "{{PASSWORD}}";',
+    `window.__ENV__.PASSWORD = "${passwordHash}"; // SHA-256 hash`
+  );
+  return new Response(modifiedHtml, {
+    status: response.status,
+    headers: response.headers
+  });
+}
 
     return response;
   } catch (e) {
