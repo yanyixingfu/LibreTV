@@ -1,0 +1,24 @@
+# wrangler.toml - Cloudflare Workers 部署配置
+name = "libretv"       # Workers 名称（自定义）
+main = "worker.js"            # 入口文件
+compatibility_date = "2024-09-03"  # 兼容性日期（选最新稳定版）
+compatibility_flags = ["streams_enable_constructors"]  # 启用流相关 API
+
+# 环境变量配置（与原 Pages 保持一致，部署后可在 Cloudflare 控制台修改）
+[vars]
+PASSWORD = "yanyixingfu" # 必须设置！鉴权密码（同原 Pages 的 PASSWORD）
+CACHE_TTL = "86400"           # 缓存时间（默认 24 小时）
+MAX_RECURSION = "5"         # 代理递归层数（默认 5）
+DEBUG = "false"               # 调试模式（默认关闭）
+# USER_AGENTS_JSON = '["UA1", "UA2"]'  # 可选：自定义 User-Agent 数组（JSON 字符串）
+
+# 静态资源配置（将根目录的静态文件映射到 Workers）
+[site]
+bucket = "./"                 # 静态资源目录（LibreTV 根目录，含 HTML/CSS/JS）
+entry-point = "worker.js"     # 入口文件（同 main）
+
+# 路由配置（部署后生效，可在 Cloudflare 控制台调整）
+# 建议绑定自定义域名，如：libretv.yourdomain.com/*
+[routes]
+pattern = "libretv.090800.xyz/*"  # 替换为你的域名
+zone_name = "libretv.yanyixingfu.top"          # 替换为你的 Cloudflare 域名
