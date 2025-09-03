@@ -7,7 +7,7 @@ compatibility_flags = ["streams_enable_constructors"]  # 启用视频流处理�
 
 # 2. 环境变量（必须配置，否则代理鉴权失败）
 [vars]
-PASSWORD = "你的自定义密码"            # 替换为你的鉴权密码（如 123456，建议复杂些）
+PASSWORD = "yanyixingfu"            # 替换为你的鉴权密码（如 123456，建议复杂些）
 CACHE_TTL = "86400"                   # 视频资源缓存时间（默认 24 小时，无需改）
 MAX_RECURSION = "5"                   # 代理递归层数（默认值，无需改）
 DEBUG = "false"                       # 调试模式（关闭即可，避免日志冗余）
@@ -19,5 +19,6 @@ bucket = "./"                         # 静态文件目录（含 index.html、cs
 # 4. 路由配置（关键：必须是数组格式，用“-”开头）
 # 注意：zone_name 需是你在 Cloudflare 已添加并激活的主域名（如 yanyixingfu.top）
 [routes]
-- pattern = "libretv.yanyixingfu.top/*"  # 你的子域名（替换为实际子域名，如“tv.你的域名.com/*”）
+- pattern = "libretv1.yanyixingfu.top/*"  # 你的子域名（替换为实际子域名，如“tv.你的域名.com/*”）
   zone_name = "yanyixingfu.top"          # 你的 Cloudflare 主域名（无 www，无子域名）
+
