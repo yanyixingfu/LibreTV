@@ -1,5 +1,5 @@
 # 1. 基础配置（Wrangler 4.x 兼容格式）
-name = "libretv-worker"
+name = "libretv"
 main = "worker.js"
 compatibility_date = "2024-09-03"
 compatibility_flags = ["streams_enable_constructors"]
@@ -16,3 +16,4 @@ DEBUG = "false"
 bucket = "./"
 
 # 注意：已删除 [routes] 配置，部署后手动添加路由（避免语法错误）
+
